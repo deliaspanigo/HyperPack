@@ -1,6 +1,8 @@
 # HyperPack
 
 # Libreries
+install.packages("remote")
+
 install.packages("shiny")
 
 install.packages("shinydashboard")
