@@ -1,10 +1,18 @@
 ## app.R ##
 
+# install.packages("remotes")
+install.packages("shiny")
+install.packages("shinydashboard")
+remotes::install_github("daattali/colourpicker")
+remotes::install_github("deliaspanigo/HyperPack")
+#install.packages("shiny")
+
+#
 
 # Librerias
 library(shiny)
 library(shinydashboard)
-library(psych)
+# library(psych)
 library(colourpicker)
 library(HyperPack)
 
@@ -33,22 +41,31 @@ ui <- dashboardPage(
     tabItems(
       tabItem(tabName = "inputs",
               h2("Inputs"),
-              numericInput(inputId = "input_CHL",
+              fluidRow(
+                column(4,
+                  numericInput(inputId = "input_CHL",
                            label = "CHL (mg/m3)",value = 2.00, step = 0.01),
-              numericInput(inputId = "input_TSS",
+                  numericInput(inputId = "input_TSS",
                            label = "TSS (g/m3)",value = 1.00, step = 0.01),
-              numericInput(inputId = "input_CDOM",
+                  numericInput(inputId = "input_CDOM",
                            label = "CDOM (m-1)",value = 0.10, step = 0.01),
               br(),
-              plotOutput("plot01"),
+              colourInput("col", "Select colour", "purple")
+              ),
+              column(8, plotOutput("plot01"))
+              ),
               br(),
+              br(),
+              br(),
+              h2("Full Data Set"),
               tableOutput("data")
 
 
 
       ),
       tabItem(tabName = "descriptiva",
-      h2("Descriptiva General")
+      h2("Descriptiva General"),
+
       ),
 
 
@@ -106,7 +123,8 @@ final_data <- reactive({
 
 
     output$plot01 <- renderPlot({
-      plot(final_data()[,1], final_data()[,ncol(final_data())])
+      plot(final_data()[,1], final_data()[,ncol(final_data())],
+           cex = 1, lwd = 6, col = input$col)
     })
 }
 
